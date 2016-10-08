@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css">
+#sListAll ul li{
+    height: 40px;
+}
+#sListAll ul li a{
+    display: block;;
+    width: 300px;
+    padding: 10px 10px 10px 10px;
+    font-size: 20px;
+}
+.sList1{
+    background-color: gray;
+    color:white ;
+    border: #1E1E1E 3px solid;
+}
+#sListAll ul li a:hover{ 
+    background-color: #2d5986;
+}
+</style>
+ <script language="javascript" type="text/javascript" src="ko/knockout-3.4.0.js"></script>
+  <script language="javascript" type="text/javascript" src="ko/knockout-projections.min.js"></script>
+ <script language="javascript" type="text/javascript" src="js/jquery-2.2.4.min.js"></script>
+<div>
+    <p>Enter Zip Code to Start</p>
+</div>
+<input placeholder="Search..." type="search" name="q" data-bind="value: query">
+<button type="button" data-bind="click:sSearch">Filter</button>
+
+
+<div id="sListAll">
+    <ul data-bind="foreach: ResArray">
+        <li><a class="sList1" href='#' data-bind=""><span data-bind="text: name, visible: isSelected"></span></a>
+        </li>
+         <br>
+    </dl>       
+</div> 
+ <script language="javascript" type="text/javascript">
+
+ function ObjRes(name, addr, Y, X,sSelected){
+    this.name=ko.observable(name);
+    this.addr=ko.observable(addr);
+    this.Y=ko.observable(Y);
+    this.X=ko.observable(X);
+    this.isSelected=ko.observable(sSelected);
+}
+
+function AppViewModel() {
+    var self=this;
+
+    self.ZipCode = ko.observable("");
+    self.flagZip=ko.observable(false);
+  self.query=ko.observable("");
+  self.sFilter=ko.observable("");
+  self.ResArray=ko.observableArray([]);
+
+  self.filterArray = ko.computed(function(){
+      if (self.sFilter().length>0 ){
+        var sresArray = self.ResArray();
+        return ko.utils.arrayFilter(sresArray, function(obj){
+          return ko.utils.stringStartWith(obj.location.toLowerCase(),
+          self.sFilter())
+        });
+      }
+    });
+
+  self.AddRes = function(name, addr, Y, X, sSelected){
+        
+      self.ResArray.push(new ObjRes(name, addr, Y, X, sSelected));
+      };
+   
+   self.sSearch= function(query) {
+    var txt="3";
+
+      console.log(query);
+
+        for (i=0, len=self.ResArray().length;i<len;i++)
+            {
+                if(!(self.ResArray()[i].name().toLowerCase().indexOf(txt.toLowerCase())>=0))
+                    {
+                        self.ResArray()[i].isSelected(!self.ResArray()[i].isSelected());
+                    }
+            }
+      };
+ 
+}
+
+var vm = new AppViewModel();
+
+ko.applyBindings(vm);
+
+vm.AddRes("Test1","addr1",-96,36,true);
+vm.AddRes("Test2","addr1",-96,36,true);
+vm.AddRes("Test3","addr1",-96,36,true);
+vm.AddRes("Test4","addr1",-96,36,true);
+
+</script>
+
+</html>
