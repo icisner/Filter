@@ -23,7 +23,7 @@
   <script language="javascript" type="text/javascript" src="ko/knockout-projections.min.js"></script>
  <script language="javascript" type="text/javascript" src="js/jquery-2.2.4.min.js"></script>
 <div>
-    <p>Enter Zip Code to Start</p>
+    <p>Enter Text to Filter</p>
 </div>
 <input data-bind = "value: sQuery"/> 
 <button type="button" data-bind="click:sSearch">Filter</button>
@@ -32,7 +32,6 @@
 <div id="sListAll">
     
     <ul data-bind="foreach: vFilterArray">
-
         <li><a class="sList1" href='#' data-bind=""><span data-bind="text: name, visible: isSelected"></span></a>
         </li>
          <br>
@@ -51,17 +50,9 @@
 function AppViewModel() {
     var self=this;
 
-    self.ZipCode = ko.observable("");
-    self.flagZip=ko.observable(false);
   self.sQuery=ko.observable("");
-  self.sFilter=ko.observable("");
   self.ResArray=ko.observableArray([]);
   self.vFilterArray=ko.observableArray([]);
-
-  self.filterArray = function(){
-            
-            console.log("Hello");
-           };
 
   self.AddRes = function(name, addr, Y, X, sSelected){
         
