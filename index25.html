@@ -25,15 +25,17 @@
 <div>
     <p>Enter Text to Filter</p>
 </div>
-<input data-bind = "value: sQuery"/> 
+
+<input placeholder="Search..." type="search" name="q" data-bind="value: sQuery">
 <button type="button" data-bind="click:sSearch">Filter</button>
 
 
 <div id="sListAll">
     
     <ul data-bind="foreach: vFilterArray">
-        <li><a class="sList1" href='#' data-bind=""><span data-bind="text: name, visible: isSelected"></span></a>
+        <li><a class="sList1" href='#' data-bind="visible: isSelected"><span data-bind="text: name"></span></a>
         </li>
+        
          <br>
     </dl>       
 </div> 
@@ -61,12 +63,17 @@ function AppViewModel() {
    
    self.sSearch= function() {
     var txt=this.sQuery();
+    
+ //  self.vFilterArray([]);
+
         for (i=0, len=self.ResArray().length;i<len;i++)
             {
-                if(!(self.ResArray()[i].name().toLowerCase().indexOf(txt.toLowerCase())>=0))
+                if(self.ResArray()[i].name().toLowerCase().indexOf(txt.toLowerCase())>=0)
                     {
+                        //self.vFilterArray=self.ResArray()[i].push;
                         self.vFilterArray()[i].isSelected(true);
                     } else {
+                         // self.vFilterArray=self.ResArray().slice(i);
                         self.vFilterArray()[i].isSelected(false);
                     }
 
@@ -79,11 +86,11 @@ var vm = new AppViewModel();
 
 ko.applyBindings(vm);
 
-vm.AddRes("Test1","addr1",-96,36,false);
+vm.AddRes("Test1","addr1",-96,36,true);
 vm.AddRes("Test2","addr1",-96,36,true);
 vm.AddRes("Test3","addr1",-96,36,true);
 vm.AddRes("Test4","addr1",-96,36,true);
-vm.vFilterArray=vm.ResArray;
+vm.vFilterArray(vm.ResArray());
 
 </script>
 
