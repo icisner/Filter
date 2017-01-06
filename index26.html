@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 <html>
 <style type="text/css">
+
+#sListAll ul{
+    height: 40px;
+    margin: 0px;
+  padding: 0;
+}
+
 #sListAll ul li{
     height: 40px;
+    margin: 0px;
+  padding: 0;
 }
 #sListAll ul li a{
     display: block;;
@@ -26,16 +35,15 @@
     <p>Enter Text to Filter</p>
 </div>
 
-<input placeholder="Search..." type="search" name="q" data-bind="value: sQuery">
-<button type="button" data-bind="click:sSearch">Filter</button>
+<input placeholder="Search..." type="search" name="q" data-bind="value: sQuery, event: { input: fCleared }">
+<button type="button" data-bind="click:sSearch">Filter</button><button type="button" data-bind="click:fCleared">Reset</button>
 
-
+<p></p>
 <div id="sListAll">
     
     <ul data-bind="foreach: vFilterArray">
-        <li><a class="sList1" href='#' data-bind="visible: isSelected"><span data-bind="text: name"></span></a>
+        <li><a class="sList1" href='#'><span data-bind="text: name, event { click: $parent.oMarkerInfo}"></span></a>
         </li>
-        
          <br>
     </dl>       
 </div> 
@@ -61,24 +69,32 @@ function AppViewModel() {
       self.ResArray.push(new ObjRes(name, addr, Y, X, sSelected));
       };
    
+      self.fCleared = function(){
+        self.vFilterArray(self.ResArray());        
+      };
+
+  self.oMarkerInfo = function(){
+      alert (self.name());
+   };
+
    self.sSearch= function() {
     var txt=this.sQuery();
     
- //  self.vFilterArray([]);
+   self.vFilterArray([]);
 
         for (i=0, len=self.ResArray().length;i<len;i++)
             {
                 if(self.ResArray()[i].name().toLowerCase().indexOf(txt.toLowerCase())>=0)
                     {
-                        //self.vFilterArray=self.ResArray()[i].push;
-                        self.vFilterArray()[i].isSelected(true);
-                    } else {
-                         // self.vFilterArray=self.ResArray().slice(i);
-                        self.vFilterArray()[i].isSelected(false);
-                    }
+                        self.vFilterArray.push(self.ResArray()[i]);
+//                        self.vFilterArray()[i].isSelected(true);
+                    } 
+//                    else {
+//                        self.vFilterArray=self.ResArray().slice(i);
+//                        self.vFilterArray()[i].isSelected(false);
+//                    }
 
             }
-
       };
 }
 
